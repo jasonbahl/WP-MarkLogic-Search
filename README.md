@@ -5,7 +5,7 @@
  - [How It Works](#how-it-works)
  - [Features](#features)
  - [Getting Help](#getting-help)
- - [Requirements](#requirement)
+ - [Requirements](#requirements)
  - [Quickstart](#quickstart)
 
 ## Overview
@@ -26,8 +26,8 @@ If you install this plugin on a site with existing content, you can insert them 
 ### Automatic Sync
 If you install this plugin on a site with existing content, you can insert them into MarkLogic in bulk.  It utilizes cron feature in WordPress so that once push button is clicked, you do not have to wait with your browser open.
 
-### Search
-
+### Faceted Search
+Display [facets](https://developer.marklogic.com/blog/faceted-search) in your search results per content type and easily drill down on specific set of search results.
 
 
 ## Getting Help
@@ -35,15 +35,14 @@ To get help with this plugin,
 
 * Create [git issues](https://github.com/seongbae/WP-MarkLogic-Search/issues)
 * Read up on [MLPHP](https://github.com/marklogic/mlphp)
-* Check out the [MarkLogic tutorials](https://developer.marklogic.com/learn)
+* Check out [MarkLogic tutorials](https://developer.marklogic.com/learn)
 
 
 ## Requirements
-* A supported version of [MarkLogic](https://github.com/marklogic/roxy/wiki/Supported-MarkLogic-versions)
-* [Ruby 1.9.3](http://www.ruby-lang.org/en/) or greater
-* [Java (jdk)](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-  Only if you wish to run the [mlcp](http://developer.marklogic.com/products/mlcp), [XQSync](http://developer.marklogic.com/code/xqsync, XQSync), or [RecordLoader](http://developer.marklogic.com/code/recordloader) commands.
-* [Git](http://git-scm.com/downloads) - Required to create a new project using "ml new".
+* MarkLogic 7 or 8  [Download](https://developer.marklogic.com/products)
+* MLPHP [Download](https://github.com/marklogic/mlphp)
+* PHP 5.6+
+* WordPress 4+
 
 ## Quick Start
 Coming soon...
