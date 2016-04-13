@@ -48,4 +48,14 @@ To get help with this plugin,
 ## Quick Start
 Coming soon...
 
+## Contributing
+Contributions are welcome.  Please feel free to clone/fork the project and subnmit pull requests.
+
+## Contact
+If you have any quesitons about this project, please contact Seong Bae at [seong.bae@marklogic.com](seong.bae@marklogic.com).
+
+## Contributors
+Chris Davis - wrote most of the WordPress plugin
+Dave Cassel - provided support with setting up search configs on MarkLogic
+
 
