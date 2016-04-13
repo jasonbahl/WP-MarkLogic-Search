@@ -36,6 +36,7 @@ To get help with this plugin,
 * Create [git issues](https://github.com/seongbae/WP-MarkLogic-Search/issues)
 * Read up on [MLPHP](https://github.com/marklogic/mlphp)
 * Check out [MarkLogic tutorials](https://developer.marklogic.com/learn)
+* Take free MarkLogic [training](http://www.marklogic.com/training/)
 
 
 ## Requirements
