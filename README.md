@@ -55,7 +55,7 @@ Contributions are welcome.  Please feel free to clone/fork the project and subnm
 If you have any quesitons about this project, please contact Seong Bae at seong.bae@marklogic.com.
 
 ## Contributors
-* Chris Davis - wrote most of the WordPress plugin
-* Dave Cassel - provided support with setting up search configs on MarkLogic
+* [Chris Davis](https://github.com/chrisguitarguy) - wrote most of the WordPress plugin
+* [Dave Cassel](https://github.com/dmcassel) - provided support with setting up search configs on MarkLogic
 
 
