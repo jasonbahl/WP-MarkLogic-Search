@@ -27,16 +27,57 @@
  * @category    WordPress
  * @license     http://opensource.org/licenses/GPL-2.0 GPL-2.0+
  */
-
 namespace MarkLogic\WpSearch;
 
 !defined('ABSPATH') && exit;
 
 define('ML_WPSEARCH_VER', '1.0.0');
 
-\ML_Loader::register(__NAMESPACE__, __DIR__.'/inc');
-\ML_Loader::register('MarkLogic\\MLPHP', __DIR__.'/vendor/mlphp/api/MarkLogic/MLPHP');
-\ML_Loader::register('Psr\\Log', __DIR__.'/vendor/psr-log/Psr/Log');
-require __DIR__.'/inc/functions.php';
+spl_autoload_register(__NAMESPACE__ . '\\autoload');
+function autoload($cls)
+{
+    $cls = ltrim($cls, '\\');
+    if(strpos($cls, __NAMESPACE__) !== 0)
+        return;
 
+    $cls = str_replace(__NAMESPACE__, '', $cls);
+
+    $path = __DIR__ . '/inc' . 
+        str_replace('\\', DIRECTORY_SEPARATOR, $cls) . '.php';
+
+    require_once($path);
+}
+
+spl_autoload_register(__NAMESPACE__ . '\\autoload_mlphp');
+function autoload_mlphp($cls)
+{
+	$cls = ltrim($cls, '\\');
+    if(strpos($cls, 'MarkLogic\\MLPHP') !== 0)
+        return;
+
+    $cls = str_replace('MarkLogic\\MLPHP', '', $cls);
+
+    $path = __DIR__ . '/vendor/mlphp/api/MarkLogic/MLPHP' . 
+        str_replace('\\', DIRECTORY_SEPARATOR, $cls) . '.php';
+
+    require_once($path);
+}
+
+spl_autoload_register(__NAMESPACE__ . '\\autoload_psrlog');
+function autoload_psrlog($cls)
+{
+	$cls = ltrim($cls, '\\');
+    if(strpos($cls, 'Psr\\Log') !== 0)
+        return;
+
+    $cls = str_replace('Psr\\Log', '', $cls);
+
+    $path = __DIR__ . '/vendor/psr-log/Psr/Log' . 
+        str_replace('\\', DIRECTORY_SEPARATOR, $cls) . '.php';
+
+    require_once($path);
+}
+
+require __DIR__.'/inc/functions.php';
+	
 add_action('plugins_loaded', 'ml_wpsearch_load');
