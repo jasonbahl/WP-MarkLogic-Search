@@ -130,6 +130,6 @@ final class MlphpDriver implements Driver
     public function search($querytext, $params)
     {
         $search = new Search($this->client);
-        return $search->retrieve($querytext, $params);
+        return $search->retrieve($querytext, array_filter($params));
     }
 }

@@ -99,12 +99,14 @@ function ml_wpsearch_search($querytext)
     }
 
     $driver = DriverRegistry::getInstance()->get('marklogic');
+    $options = Options::getOptions();
+    
     $results = $driver->search(stripslashes(sanitize_text_field($querytext)), array(
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 1,
         'pageLength' => isset($_REQUEST['pageLength']) ? $_REQUEST['pageLength'] : 10,
         'view' => 'all',
-        'options' => 'www',
-        'transform' => 'www',
+        'options' => $options['rest_config_option'],
+        'transform' => $options['rest_transform'],
     ));
 
     if ($results->getTotal() < 1) {
