@@ -90,7 +90,7 @@ class SyncManager
     {
         try {
             $this->driver->delete($this->getCurrentBlog(), $post);
-            do_action('ml_wpsearch_deleted_post', $postId);
+            do_action('ml_wpsearch_deleted_post', $post->ID);
         } catch (\Exception $e) {
             $this->logException($e, sprintf('deleting post #%d', $post->ID));
         }
