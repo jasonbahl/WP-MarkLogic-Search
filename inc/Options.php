@@ -104,18 +104,40 @@ class Options extends Hooks
                 'field' => 'replace_search',
             )
         );
+        add_settings_field(
+            $restConfigOption = self::idFor('rest_config_option'),
+            __('REST Config Option', 'marklogic'),
+            array($this, 'textInput'),
+            self::SETTING,
+            'search',
+            array(
+                'label_for' => $restConfigOption,
+                'field' => 'rest_config_option',
+            )
+        );
+        add_settings_field(
+            $restTransform = self::idFor('rest_transform'),
+            __('REST Transform', 'marklogic'),
+            array($this, 'textInput'),
+            self::SETTING,
+            'search',
+            array(
+                'label_for' => $restTransform,
+                'field' => 'rest_transform',
+            )
+        );
     }
 
     public function clean($dirty)
     {
         $clean = array();
-        foreach (array('host', 'username', 'password') as $fn) {
+        foreach (array('host', 'username', 'password','rest_config_option','rest_transform') as $fn) {
             $clean[$fn] = isset($dirty[$fn]) ? sanitize_text_field($dirty[$fn]) : null;
         }
         $clean['port'] = isset($dirty['port']) ? filter_var($dirty['port'], FILTER_VALIDATE_INT) : null;
         $clean['replace_search'] = empty($dirty['replace_search']) ? false : true;
         $clean['search_page'] = empty($dirty['search_page']) ? null : absint($dirty['search_page']);
-
+        
         return $clean;
     }
 

@@ -101,10 +101,16 @@ final class MlphpDriver implements Driver
     {
         return new Document($this->client, sprintf('/%s.xml', apply_filters(
             'ml_wpsearch_document_uri',
-            untrailingslashit(preg_replace('#^https?://#ui', '', get_permalink($post))),
+            $this->createURIwithPostID($blogId, $post),
             $post
         )));
     }
+    private function createURIwithPostID($blogId, $post)
+    {
+        $host = parse_url(home_url(), PHP_URL_HOST);
+        return sprintf('%s/%s/%s', $host, $blogId, $post->ID);
+    }
+
 
     private function buildCollections($post)
     {
@@ -130,6 +136,6 @@ final class MlphpDriver implements Driver
     public function search($querytext, $params)
     {
         $search = new Search($this->client);
-        return $search->retrieve($querytext, $params);
+        return $search->retrieve($querytext, array_filter($params));
     }
 }
