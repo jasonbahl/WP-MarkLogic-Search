@@ -21,5 +21,5 @@ interface PostSerializer
      * @param   object $post
      * @return  string
      */
-    public function serialize($post);
+    public function serialize($post, $postMeta);
 }

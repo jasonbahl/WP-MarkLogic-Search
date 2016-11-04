@@ -19,7 +19,7 @@ abstract class AbstractXmlSerializer implements PostSerializer
 {
     const XMLNS = 'http://developer.marklogic.com/site/internal';
 
-    protected function createDocument($post)
+    protected function createDocument($post, $postMeta=null)
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');
         $root = $doc->createElementNS(self::XMLNS, 'ml:Post');
@@ -76,7 +76,19 @@ abstract class AbstractXmlSerializer implements PostSerializer
             $root->appendChild($elem);
         }
 
+        //if ($webinarDisplay = $postMeta['_ml_webinar_display'])
+        $metadata = $doc->createElementNS(self::XMLNS, 'ml:metadata');
+        $root->appendChild($metadata);
+        //print_r($postMeta);
+        //die;
+        foreach ($postMeta as $key => $value) {
+            $metadata->appendChild($doc->createElementNS(self::XMLNS, 'ml:'.$key, $value[0]));
+        }
+
         $doc->appendChild($root);
+
+        //print_r($doc->saveHTML());
+        //die;
 
         do_action('ml_wpsearch_serialize_document', $post, $doc, $root);
 

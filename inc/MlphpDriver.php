@@ -41,8 +41,9 @@ final class MlphpDriver implements Driver
      */
     public function persist($blogId, $post)
     {
-        $xml = $this->serializer->serialize($post);
-        $doc = $this->createDocument($blogId, $post);
+        $postMeta = get_post_meta($post->ID);
+        $xml = $this->serializer->serialize($post, $postMeta);
+        $doc = $this->createDocument($blogId, $post, $postMeta);
         $doc->setContent($xml);
         $doc->setContentType('application/xml');
         $doc->write(null, array(
@@ -97,7 +98,7 @@ final class MlphpDriver implements Driver
         return new BulkResult($count, $errors);
     }
 
-    private function createDocument($blogId, $post)
+    private function createDocument($blogId, $post, $postMeta)
     {
         return new Document($this->client, sprintf('/%s.xml', apply_filters(
             'ml_wpsearch_document_uri',
