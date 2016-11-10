@@ -76,19 +76,19 @@ abstract class AbstractXmlSerializer implements PostSerializer
             $root->appendChild($elem);
         }
 
-        //if ($webinarDisplay = $postMeta['_ml_webinar_display'])
         $metadata = $doc->createElementNS(self::XMLNS, 'ml:metadata');
         $root->appendChild($metadata);
-        //print_r($postMeta);
-        //die;
+        
         foreach ($postMeta as $key => $value) {
+
+            if (preg_match('/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})$/', $value[0], $matches)) {
+                $value[0] = $matches[1] . "T" . $matches[2] . ":00+00:00"; //2016-11-09T20:34:11+00:00
+            }
+
             $metadata->appendChild($doc->createElementNS(self::XMLNS, 'ml:'.$key, $value[0]));
         }
 
         $doc->appendChild($root);
-
-        //print_r($doc->saveHTML());
-        //die;
 
         do_action('ml_wpsearch_serialize_document', $post, $doc, $root);
 

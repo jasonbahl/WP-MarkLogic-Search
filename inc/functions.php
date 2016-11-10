@@ -104,49 +104,50 @@ function ml_wpsearch_search($querytext)
 
     $searchExcludeArr = explode(PHP_EOL, $options['search_exclude']);
     
-    //print_r($searchExcludeArr);
-    //echo "<br>";
-
     foreach ($searchExcludeArr as $searchExclude) {
-        //echo $searchExclude . "<br>";
 
-        preg_match('/(\w+)([=>])(.+)/', $searchExclude, $matches);
+        $exitLoop = false;
 
-        //print_r($matches);
-        //echo "<br>";
-
-        if ($matches) {
-
-            //echo "<br>";
+        if (preg_match('/(\w+)\s(.+)\s({?{?.+}?}?)/', $searchExclude, $matches)) {
+            
             $elem = $matches[1];
             $oper = $matches[2];   
             $value = $matches[3];
 
-            if (preg_match('/{{(\w+)}}/', $value, $specialMatches)) {
-                //print_r($specialMatches);
-                if ($specialMatches[1] == 'today') {
-                    $value = '"' . date("Y-m-d H:i:s") . '"';
-                    
+            if (preg_match('/^{{(\w+)}}?/', $value, $specialMatches)) {
+            
+                switch($specialMatches[1]) {
+                    case 'today':
+                        $value = '"' . date("Y-m-d\TH:i:s+00:00") . '"';
+                        break;
+                    default:
+                        $exitLoop = true;
+                        break;
                 }
+            } 
 
-                $querytext .= " AND " . $elem . " GT " . $value;
+            if ($exitLoop)
+                break;
+
+            switch(ord($oper)) {
+                case 61:
+                    $oper = ":";
+                    break;
+                case 62:
+                    $oper = "GT";
+                    break;
+                case 38:
+                    $oper = "LT";
+                    break;
+                default:
+                    break;
             }
 
-            //print_r($oper);
-            if ($oper == '=')
-                $querytext .= " AND -" . $elem . ":" . $value;
+            $querytext .= " AND -" . $elem . " " . $oper . " " . $value;
 
-            
-
-        }
-        else 
-            break;
+        } 
     }
 
-    print_r($querytext);
-    //die;
-
-    
     $results = $driver->search(stripslashes(sanitize_text_field($querytext)), array(
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 1,
         'pageLength' => isset($_REQUEST['pageLength']) ? $_REQUEST['pageLength'] : 10,
