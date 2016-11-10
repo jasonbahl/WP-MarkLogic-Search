@@ -19,7 +19,7 @@ abstract class AbstractXmlSerializer implements PostSerializer
 {
     const XMLNS = 'http://developer.marklogic.com/site/internal';
 
-    protected function createDocument($post)
+    protected function createDocument($post, $postMeta=null)
     {
         $doc = new \DOMDocument('1.0', 'UTF-8');
         $root = $doc->createElementNS(self::XMLNS, 'ml:Post');
@@ -74,6 +74,18 @@ abstract class AbstractXmlSerializer implements PostSerializer
 
         if (in_array('post_tag', $taxonomies, true) && ($elem = $this->buildTags($post, $doc))) {
             $root->appendChild($elem);
+        }
+
+        $metadata = $doc->createElementNS(self::XMLNS, 'ml:metadata');
+        $root->appendChild($metadata);
+        
+        foreach ($postMeta as $key => $value) {
+
+            if (preg_match('/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})$/', $value[0], $matches)) {
+                $value[0] = $matches[1] . "T" . $matches[2] . ":00+00:00"; //2016-11-09T20:34:11+00:00
+            }
+
+            $metadata->appendChild($doc->createElementNS(self::XMLNS, 'ml:'.$key, $value[0]));
         }
 
         $doc->appendChild($root);

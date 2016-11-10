@@ -18,9 +18,9 @@ final class DefaultXmlSerializer extends AbstractXmlSerializer
     /**
      * {@inheritdoc}
      */
-    public function serialize($post)
+    public function serialize($post, $postMeta)
     {
-        $doc = $this->createDocument($post);
+        $doc = $this->createDocument($post, $postMeta);
         return $doc->saveXML();
     }
 }

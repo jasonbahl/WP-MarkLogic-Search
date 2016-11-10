@@ -51,6 +51,7 @@ function ml_wpsearch_get_logger()
 function ml_wpsearch_create_client()
 {
     $options = Options::getOptions();
+    
     foreach (array('username', 'password') as $req) {
         if (empty($options[$req])) {
             return null;
@@ -100,7 +101,53 @@ function ml_wpsearch_search($querytext)
 
     $driver = DriverRegistry::getInstance()->get('marklogic');
     $options = Options::getOptions();
+
+    $searchExcludeArr = explode(PHP_EOL, $options['search_exclude']);
     
+    foreach ($searchExcludeArr as $searchExclude) {
+
+        $exitLoop = false;
+
+        if (preg_match('/(\w+)\s(.+)\s({?{?.+}?}?)/', $searchExclude, $matches)) {
+            
+            $elem = $matches[1];
+            $oper = $matches[2];   
+            $value = $matches[3];
+
+            if (preg_match('/^{{(\w+)}}?/', $value, $specialMatches)) {
+            
+                switch($specialMatches[1]) {
+                    case 'today':
+                        $value = '"' . date("Y-m-d\TH:i:s+00:00") . '"';
+                        break;
+                    default:
+                        $exitLoop = true;
+                        break;
+                }
+            } 
+
+            if ($exitLoop)
+                break;
+
+            switch(ord($oper)) {
+                case 61:
+                    $oper = ":";
+                    break;
+                case 62:
+                    $oper = "GT";
+                    break;
+                case 38:
+                    $oper = "LT";
+                    break;
+                default:
+                    break;
+            }
+
+            $querytext .= " AND -" . $elem . " " . $oper . " " . $value;
+
+        } 
+    }
+
     $results = $driver->search(stripslashes(sanitize_text_field($querytext)), array(
         'start' => isset($_REQUEST['start']) ? $_REQUEST['start'] : 1,
         'pageLength' => isset($_REQUEST['pageLength']) ? $_REQUEST['pageLength'] : 10,
